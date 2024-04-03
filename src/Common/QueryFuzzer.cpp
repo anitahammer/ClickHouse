@@ -164,8 +164,6 @@ Field QueryFuzzer::fuzzField(Field field)
         {
             size_t pos = fuzz_rand() % arr.size();
             arr.erase(arr.begin() + pos);
-            if (debug_output)
-                std::cerr << "erased\n";
         }
 
         if (fuzz_rand() % 5 == 0)
@@ -174,14 +172,10 @@ Field QueryFuzzer::fuzzField(Field field)
             {
                 size_t pos = fuzz_rand() % arr.size();
                 arr.insert(arr.begin() + pos, fuzzField(arr[pos]));
-                if (debug_output)
-                    std::cerr << fmt::format("inserted (pos {})\n", pos);
             }
             else
             {
                 arr.insert(arr.begin(), getRandomField(0));
-                if (debug_output)
-                    std::cerr << "inserted (0)\n";
             }
 
         }
@@ -199,9 +193,6 @@ Field QueryFuzzer::fuzzField(Field field)
         {
             size_t pos = fuzz_rand() % arr.size();
             arr.erase(arr.begin() + pos);
-
-            if (debug_output)
-                std::cerr << "erased\n";
         }
 
         if (fuzz_rand() % 5 == 0)
@@ -210,16 +201,10 @@ Field QueryFuzzer::fuzzField(Field field)
             {
                 size_t pos = fuzz_rand() % arr.size();
                 arr.insert(arr.begin() + pos, fuzzField(arr[pos]));
-
-                if (debug_output)
-                    std::cerr << fmt::format("inserted (pos {})\n", pos);
             }
             else
             {
                 arr.insert(arr.begin(), getRandomField(0));
-
-                if (debug_output)
-                    std::cerr << "inserted (0)\n";
             }
 
         }
@@ -350,11 +335,6 @@ void QueryFuzzer::fuzzOrderByList(IAST * ast)
 
             list->children.insert(pos, elem);
         }
-        else
-        {
-            if (debug_output)
-                std::cerr << "No random column.\n";
-        }
     }
 
     // We don't have to recurse here to fuzz the children, this is handled by
@@ -386,9 +366,6 @@ void QueryFuzzer::fuzzColumnLikeExpressionList(IAST * ast)
         auto col = getRandomColumnLike();
         if (col)
             impl->children.insert(pos, col);
-        else
-            if (debug_output)
-                std::cerr << "No random column.\n";
     }
 
     // We don't have to recurse here to fuzz the children, this is handled by
@@ -1369,16 +1346,6 @@ void QueryFuzzer::fuzzMain(ASTPtr & ast)
 
     collectFuzzInfoMain(ast);
     fuzz(ast);
-
-    if (debug_output)
-    {
-        std::cout << std::endl;
-
-        WriteBufferFromOStream ast_buf(std::cout, 4096);
-        formatAST(*ast, ast_buf, false /*highlight*/);
-        ast_buf.finalize();
-        std::cout << std::endl << std::endl;
-    }
 }
 
 }

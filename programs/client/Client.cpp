@@ -779,6 +779,11 @@ bool Client::processWithFuzzing(const String & full_query)
             if (fuzz_step > 0)
             {
                 fuzzer.fuzzMain(ast_to_process);
+                std::cout << std::endl;
+                WriteBufferFromOStream ast_buf(std::cout, 4096);
+                formatAST(*ast_to_process, ast_buf, false /*highlight*/);
+                ast_buf.finalize();
+                std::cout << std::endl << std::endl;
             }
 
             auto base_after_fuzz = fuzz_base->formatForErrorMessage();
