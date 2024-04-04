@@ -9,6 +9,11 @@
 namespace DB
 {
 
+namespace ErrorCodes
+{
+extern const int LOGICAL_ERROR;
+}
+
 /// High-order function to run callbacks (functions with 'void()' signature) somewhere asynchronously.
 template <typename Result, typename Callback = std::function<Result()>>
 using ThreadPoolCallbackRunnerUnsafe = std::function<std::future<Result>(Callback &&, Priority)>;
